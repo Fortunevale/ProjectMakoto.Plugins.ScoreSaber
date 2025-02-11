@@ -1,4 +1,4 @@
-// Project Makoto
+﻿// Project Makoto
 // Copyright (C) 2024  Fortunevale
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -300,10 +300,10 @@ internal static class ScoreSaberCommandAbstractions
 
                         var asset = await (await ctx.Client.GetChannelAsync(ctx.Bot.status.SafeReadOnlyConfig.Channels.GraphAssets)).SendMessageAsync(new DiscordMessageBuilder().WithFile(file, stream));
 
-                        LoadedGraph = asset.Attachments[0].Url;
+                        LoadedGraph = asset.Attachments[0].Url.ToString();
 
                         embed = embed.AsInfo(ctx, "Score Saber");
-                        embed.ImageUrl = asset.Attachments[0].Url;
+                        embed.ImageUrl = asset.Attachments[0].Url.ToString();
                         builder = builder.WithEmbed(embed);
                         _ = builder.AddComponents(ProfileInteractionRow);
                         _ = await ctx.BaseCommand.RespondOrEdit(builder);
