@@ -40,7 +40,7 @@ internal sealed class ScoreSaberMapLeaderboardCommand : BaseCommand
                 Description = this.GetString(CommandKey.MapLeaderboard.LoadingScoreboard, true)
             }.AsLoading(ctx, "Score Saber");
 
-            _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed));
+            _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed));
 
             var NextPageId = Guid.NewGuid().ToString();
             var PrevPageId = Guid.NewGuid().ToString();
@@ -63,19 +63,19 @@ internal sealed class ScoreSaberMapLeaderboardCommand : BaseCommand
             catch (InternalServerErrorException)
             {
                 embed.Description = this.GetString(CommandKey.InternalServerError, true);
-                _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+                _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
                 return;
             }
             catch (NotFoundException)
             {
                 embed.Description = this.GetString(CommandKey.MapLeaderboard.ScoreboardNotExist, true);
-                _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+                _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
                 throw;
             }
             catch (ForbiddenException)
             {
                 embed.Description = this.GetString(CommandKey.ForbiddenError, true);
-                _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+                _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
                 return;
             }
             catch (Exception)
@@ -148,7 +148,7 @@ internal sealed class ScoreSaberMapLeaderboardCommand : BaseCommand
                 if (scoreSaberPage > TotalPages)
                 {
                     embed.Description = this.GetString(CommandKey.MapLeaderboard.PageNotExist, true, new TVar("Page", scoreSaberPage));
-                    _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+                    _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
                     return;
                 }
 
@@ -163,19 +163,19 @@ internal sealed class ScoreSaberMapLeaderboardCommand : BaseCommand
                 catch (InternalServerErrorException)
                 {
                     embed.Description = this.GetString(CommandKey.InternalServerError, true);
-                    _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+                    _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
                     return;
                 }
                 catch (NotFoundException)
                 {
                     embed.Description = this.GetString(CommandKey.MapLeaderboard.ScoreboardNotExist, true);
-                    _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+                    _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
                     throw;
                 }
                 catch (ForbiddenException)
                 {
                     embed.Description = this.GetString(CommandKey.ForbiddenError, true);
-                    _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+                    _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
                     return;
                 }
                 catch (Exception)
@@ -201,7 +201,7 @@ internal sealed class ScoreSaberMapLeaderboardCommand : BaseCommand
                 var previousPageButton = new DiscordButtonComponent(ButtonStyle.Primary, PrevPageId, this.GetString(this.t.Common.PreviousPage), (scoreSaberPage + InternalPage - 1 <= 0), new DiscordComponentEmoji(DiscordEmoji.FromUnicode("◀")));
                 var nextPageButton = new DiscordButtonComponent(ButtonStyle.Primary, NextPageId, this.GetString(this.t.Common.NextPage), (scoreSaberPage + 1 > scores.Metadata.TotalPages / scores.Metadata.ItemCount), new DiscordComponentEmoji(DiscordEmoji.FromUnicode("▶")));
 
-                _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed).AddComponents(new List<DiscordComponent> { previousPageButton, nextPageButton }));
+                _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed).AddComponents(new List<DiscordComponent> { previousPageButton, nextPageButton }));
             };
 
             await SendPage(InternalPage, scoreSaberPage);

@@ -26,14 +26,14 @@ internal sealed class ScoreSaberUnlinkCommand : BaseCommand
             {
                 ScoreSaberPlugin.Plugin!.Users![ctx.User.Id].ScoreSaberId = 0;
 
-                _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(new DiscordEmbedBuilder
+                _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(new DiscordEmbedBuilder
                 {
                     Description = this.GetString(CommandKey.Unlink.Unlinked, true)
                 }.AsSuccess(ctx, "Score Saber")));
             }
             else
             {
-                _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(new DiscordEmbedBuilder
+                _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(new DiscordEmbedBuilder
                 {
                     Description = this.GetString(CommandKey.Unlink.NoLink, true)
                 }.AsError(ctx, "Score Saber")));

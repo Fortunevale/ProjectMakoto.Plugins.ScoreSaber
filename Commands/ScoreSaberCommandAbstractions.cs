@@ -39,7 +39,7 @@ internal static class ScoreSaberCommandAbstractions
             Description = cmd.GetString(CommandKey.Profile.LoadingPlayer, true)
         }.AsLoading(ctx, "Score Saber");
 
-        _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed));
+        _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed));
 
         try
         {
@@ -93,7 +93,7 @@ internal static class ScoreSaberCommandAbstractions
                             _ = ShowProfile().Add(ctx.Bot, ctx);
                             ScoreSaberPlugin.Plugin!.Users![ctx.User.Id].ScoreSaberId = Convert.ToUInt64(player.id);
 
-                            var new_msg = await cmd.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(new DiscordEmbedBuilder
+                            var new_msg = await cmd.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(new DiscordEmbedBuilder
                             {
                                 Description = cmd.GetString(CommandKey.Profile.LinkSuccessful).Build(true, 
                                     new TVar("ProfileName", player.name),
@@ -119,7 +119,7 @@ internal static class ScoreSaberCommandAbstractions
 
                                 embed = embed.AsError(ctx, "Score Saber");
                                 embed.Description = cmd.GetString(CommandKey.InternalServerError, true);
-                                _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed));
+                                _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed));
 
                                 return;
                             }
@@ -130,7 +130,7 @@ internal static class ScoreSaberCommandAbstractions
 
                                 embed = embed.AsError(ctx, "Score Saber");
                                 embed.Description = cmd.GetString(CommandKey.ForbiddenError, true);
-                                _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed));
+                                _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed));
                                 return;
                             }
                             catch (Exception)
@@ -153,7 +153,7 @@ internal static class ScoreSaberCommandAbstractions
 
                                 embed = embed.AsError(ctx, "Score Saber");
                                 embed.Description = cmd.GetString(CommandKey.InternalServerError, true);
-                                _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed));
+                                _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed));
                                 return;
                             }
                             catch (ForbiddenException)
@@ -163,7 +163,7 @@ internal static class ScoreSaberCommandAbstractions
 
                                 embed = embed.AsError(ctx, "Score Saber");
                                 embed.Description = cmd.GetString(CommandKey.ForbiddenError, true);
-                                _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed));
+                                _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed));
                                 return;
                             }
                             catch (Exception)
@@ -223,7 +223,7 @@ internal static class ScoreSaberCommandAbstractions
                 if (ScoreSaberPlugin.Plugin!.Users![ctx.User.Id].ScoreSaberId == 0 && AddLinkButton)
                     _ = builder.AddComponents(LinkButton);
 
-                _ = await ctx.BaseCommand.RespondOrEdit(builder.WithEmbed(embed).AddComponents((scoreType == ScoreType.Top ? TopScoreInteractionRow : RecentScoreInteractionRow)));
+                _ = await ctx.BaseCommand.RespondOrEdit(builder.AddEmbed(embed).AddComponents((scoreType == ScoreType.Top ? TopScoreInteractionRow : RecentScoreInteractionRow)));
             }
 
             var LoadedGraph = "";
@@ -258,7 +258,7 @@ internal static class ScoreSaberCommandAbstractions
                     _ = builder.AddComponents(ProfileInteractionRow);
                 }
 
-                _ = await ctx.BaseCommand.RespondOrEdit(builder.WithEmbed(embed));
+                _ = await ctx.BaseCommand.RespondOrEdit(builder.AddEmbed(embed));
 
                 var file = $"{Guid.NewGuid()}.png";
 
@@ -303,8 +303,8 @@ internal static class ScoreSaberCommandAbstractions
                         LoadedGraph = asset.Attachments[0].Url;
 
                         embed = embed.AsInfo(ctx, "Score Saber");
-                        embed.ImageUrl = asset.Attachments[0].Url;
-                        builder = builder.WithEmbed(embed);
+                        embed.ImageUrl = asset.Attachments[0].Url.ToString();
+                        builder = builder.AddEmbed(embed);
                         _ = builder.AddComponents(ProfileInteractionRow);
                         _ = await ctx.BaseCommand.RespondOrEdit(builder);
                     }
@@ -340,22 +340,22 @@ internal static class ScoreSaberCommandAbstractions
         catch (InternalServerErrorException)
         {
             embed.Description = cmd.GetString(CommandKey.InternalServerError, true);
-            _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+            _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
         }
         catch (ForbiddenException)
         {
             embed.Description = cmd.GetString(CommandKey.ForbiddenError, true);
-            _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+            _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
         }
         catch (NotFoundException)
         {
             embed.Description = cmd.GetString(CommandKey.Profile.InvalidId, true);
-            _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+            _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
         }
         catch (UnprocessableEntityException)
         {
             embed.Description = cmd.GetString(CommandKey.Profile.InvalidId, true);
-            _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+            _ = await ctx.BaseCommand.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
         }
         catch (Exception)
         {

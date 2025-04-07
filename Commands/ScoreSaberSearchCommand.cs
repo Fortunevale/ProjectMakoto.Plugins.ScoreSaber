@@ -64,7 +64,7 @@ internal sealed class ScoreSaberSearchCommand : BaseCommand
                 Description = this.GetString(CommandKey.Search.SelectContinent, true)
             }.AsAwaitingInput(ctx, "Score Saber");
 
-            _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed).AddComponents(GetContinents("no_country")).AddComponents(start_search_button));
+            _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed).AddComponents(GetContinents("no_country")).AddComponents(start_search_button));
             CancellationTokenSource tokenSource = new();
 
             var selectedContinent = "no_country";
@@ -95,7 +95,7 @@ internal sealed class ScoreSaberSearchCommand : BaseCommand
                                 }
 
                                 var page = GetCountries(selectedContinent, selectedCountry, currentPage);
-                                var builder = new DiscordMessageBuilder().WithEmbed(embed).AddComponents(page);
+                                var builder = new DiscordMessageBuilder().AddEmbed(embed).AddComponents(page);
 
                                 if (currentPage == 1 && ctx.Bot.CountryCodes.List.Where(x => x.Value.ContinentCode.ToLower() == selectedContinent.ToLower()).Count() > 25)
                                 {
@@ -120,7 +120,7 @@ internal sealed class ScoreSaberSearchCommand : BaseCommand
                             {
                                 ctx.Client.ComponentInteractionCreated -= RunDropdownInteraction;
                                 embed.Description = this.GetString(CommandKey.Search.Searching, true);
-                                _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsLoading(ctx, "Score Saber")));
+                                _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsLoading(ctx, "Score Saber")));
 
                                 if (currentFetchedPage != lastFetchedPage)
                                 {
@@ -134,7 +134,7 @@ internal sealed class ScoreSaberSearchCommand : BaseCommand
                                         ctx.Client.ComponentInteractionCreated -= RunDropdownInteraction;
 
                                         embed.Description = this.GetString(CommandKey.InternalServerError, true);
-                                        _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+                                        _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
                                         return;
                                     }
                                     catch (ForbiddenException)
@@ -143,7 +143,7 @@ internal sealed class ScoreSaberSearchCommand : BaseCommand
                                         ctx.Client.ComponentInteractionCreated -= RunDropdownInteraction;
 
                                         embed.Description = this.GetString(CommandKey.ForbiddenError, true);
-                                        _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+                                        _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
                                         return;
                                     }
                                     catch (Exception)
@@ -182,7 +182,7 @@ internal sealed class ScoreSaberSearchCommand : BaseCommand
                                 ctx.Client.ComponentInteractionCreated += RunDropdownInteraction;
 
                                 embed.Description = this.GetString(CommandKey.Search.FoundCount, true, new TVar("TotalCount", lastSearch.metadata.total));
-                                _ = await this.RespondOrEdit(builder.WithEmbed(embed.AsSuccess(ctx, "Score Saber")));
+                                _ = await this.RespondOrEdit(builder.AddEmbed(embed.AsSuccess(ctx, "Score Saber")));
                             }
 
                             if (e.GetCustomId() == "start_search")
@@ -270,8 +270,8 @@ internal sealed class ScoreSaberSearchCommand : BaseCommand
                                 selectedContinent = e.Values.First();
 
                                 _ = selectedContinent != "no_country"
-                                    ? await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed).AddComponents(GetContinents(selectedContinent)).AddComponents(next_step_button))
-                                    : await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed).AddComponents(GetContinents(selectedContinent)).AddComponents(start_search_button));
+                                    ? await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed).AddComponents(GetContinents(selectedContinent)).AddComponents(next_step_button))
+                                    : await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed).AddComponents(GetContinents(selectedContinent)).AddComponents(start_search_button));
                             }
 
                             try
@@ -289,7 +289,7 @@ internal sealed class ScoreSaberSearchCommand : BaseCommand
                     catch (NotFoundException)
                     {
                         embed.Description = this.GetString(CommandKey.Search.NoSearchResult, true);
-                        _ = await this.RespondOrEdit(new DiscordMessageBuilder().WithEmbed(embed.AsError(ctx, "Score Saber")));
+                        _ = await this.RespondOrEdit(new DiscordMessageBuilder().AddEmbed(embed.AsError(ctx, "Score Saber")));
                     }
                     catch (Exception)
                     {
